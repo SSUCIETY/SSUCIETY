@@ -25,7 +25,7 @@ public class Club implements IFirebaseModel {
 
     private Club(){}
 
-    public Club(String name, String wallpaperLink, String introduction, String description, boolean hasClubroom, String tagId, String adminId, Map<String, Boolean> activityIds) {
+    public Club(String name, String wallpaperLink, String introduction, String description, boolean hasClubroom, String tagId, String adminId, Map<String, Boolean> activityIds, Map<String, Boolean> scheduleIds) {
         this.name = name;
         this.wallpaperLink = wallpaperLink;
         this.introduction = introduction;
@@ -34,6 +34,7 @@ public class Club implements IFirebaseModel {
         this.tagId = tagId;
         this.adminId = adminId;
         this.activityIds = activityIds;
+        this.scheduleIds = scheduleIds;
     }
 
     public String getName() {
