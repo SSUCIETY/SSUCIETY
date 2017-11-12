@@ -21,11 +21,11 @@ public class User implements IFirebaseModel {
     private int admissionYear;
     private int gender;
     private String managingClubId;
-    private List<String> starredClubIds;
+    private Map<String, Boolean> starredClubIds;
 
     private User(){}
 
-    public User(String name, String email, String phoneNumber, String profileLink, String major, int admissionYear, int gender, String managingClubId, List<String> starredClubIds) {
+    public User(String name, String email, String phoneNumber, String profileLink, String major, int admissionYear, int gender, String managingClubId, Map<String, Boolean> starredClubIds) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -69,7 +69,7 @@ public class User implements IFirebaseModel {
         return managingClubId;
     }
 
-    public List<String> getStarredClubIds() {
+    public Map<String, Boolean> getStarredClubIds() {
         return starredClubIds;
     }
 
@@ -105,8 +105,12 @@ public class User implements IFirebaseModel {
         this.managingClubId = managingClubId;
     }
 
-    public void setStarredClubIds(List<String> starredClubIds) {
+    public void setStarredClubIds(Map<String, Boolean> starredClubIds) {
         this.starredClubIds = starredClubIds;
+    }
+
+    public void appendStarredClubId(String clubId){
+        this.starredClubIds.put(clubId, true);
     }
 
     @Override

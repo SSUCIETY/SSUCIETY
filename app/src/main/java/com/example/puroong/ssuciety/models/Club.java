@@ -4,6 +4,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,10 +20,12 @@ public class Club implements IFirebaseModel {
     private boolean hasClubroom;
     private String tagId;
     private String adminId;
+    private Map<String, Boolean> activityIds;
+    private Map<String, Boolean> scheduleIds;
 
     private Club(){}
 
-    public Club(String name, String wallpaperLink, String introduction, String description, boolean hasClubroom, String tagId, String adminId) {
+    public Club(String name, String wallpaperLink, String introduction, String description, boolean hasClubroom, String tagId, String adminId, Map<String, Boolean> activityIds) {
         this.name = name;
         this.wallpaperLink = wallpaperLink;
         this.introduction = introduction;
@@ -30,6 +33,7 @@ public class Club implements IFirebaseModel {
         this.hasClubroom = hasClubroom;
         this.tagId = tagId;
         this.adminId = adminId;
+        this.activityIds = activityIds;
     }
 
     public String getName() {
@@ -60,6 +64,10 @@ public class Club implements IFirebaseModel {
         return adminId;
     }
 
+    public Map<String, Boolean> getActivityIds() { return activityIds; }
+
+    public Map<String, Boolean> getScheduleIds() { return scheduleIds; }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -87,6 +95,12 @@ public class Club implements IFirebaseModel {
     public void setAdminId(String adminId) {
         this.adminId = adminId;
     }
+
+    public void setActivityIds(Map<String, Boolean> activityIds) { this.activityIds = activityIds; }
+
+    public void appendActiviyId(String activityId) { this.activityIds.put(activityId, true); }
+
+    public void appendScheduleId(String scheduleId) { this.scheduleIds.put(scheduleId, true); }
 
     @Override
     @Exclude
