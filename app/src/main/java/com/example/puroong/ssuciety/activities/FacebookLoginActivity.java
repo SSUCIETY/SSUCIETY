@@ -1,4 +1,4 @@
-package com.example.puroong.ssuciety;
+package com.example.puroong.ssuciety.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.puroong.ssuciety.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
