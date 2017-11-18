@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/profile"
+            android:title="프로필" />
+        <item
+            android:id="@+id/register_club"
+            android:title="동아리 등록" />
+        <item
+            android:id="@+id/manage_club"
+            android:title="동아리 관리" />
+        <item
+            android:id="@+id/my_schedules"
+            android:title="일정 보기" />
+    </group>
+
+</menu>

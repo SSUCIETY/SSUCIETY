@@ -2,4 +2,15 @@
     <string name="app_name">SSUCIETY</string>
     <string name="facebook_app_id">148903879063924</string>
     <string name="fb_login_protocol_scheme">fb148903879063924</string>
+    <string name="title_activity_club_list">동아리 관리</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string-array name="tag_array">
+        <item>예술</item>
+        <item>체육</item>
+        <item>창작</item>
+        <item>학술</item>
+    </string-array>
 </resources>

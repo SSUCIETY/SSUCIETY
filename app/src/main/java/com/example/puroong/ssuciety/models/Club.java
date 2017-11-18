@@ -1,11 +1,15 @@
 package com.example.puroong.ssuciety.models;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by puroong on 11/10/17.
@@ -22,10 +26,11 @@ public class Club implements IFirebaseModel {
     private String adminId;
     private Map<String, Boolean> activityIds;
     private Map<String, Boolean> scheduleIds;
+    private Map<String, Boolean> starredUserIds;
 
     private Club(){}
 
-    public Club(String name, String wallpaperLink, String introduction, String description, boolean hasClubroom, String tagId, String adminId, Map<String, Boolean> activityIds, Map<String, Boolean> scheduleIds) {
+    public Club(String name, String wallpaperLink, String introduction, String description, boolean hasClubroom, String tagId, String adminId, Map<String, Boolean> activityIds, Map<String, Boolean> scheduleIds, Map<String, Boolean> starredUserIds) {
         this.name = name;
         this.wallpaperLink = wallpaperLink;
         this.introduction = introduction;
@@ -35,6 +40,17 @@ public class Club implements IFirebaseModel {
         this.adminId = adminId;
         this.activityIds = activityIds;
         this.scheduleIds = scheduleIds;
+        this.starredUserIds = starredUserIds;
+
+        if(this.activityIds == null){
+            this.activityIds = new HashMap<>();
+        }
+        if(this.scheduleIds == null){
+            this.scheduleIds = new HashMap<>();
+        }
+        if(this.starredUserIds == null){
+            this.starredUserIds = new HashMap<>();
+        }
     }
 
     public String getName() {
@@ -68,6 +84,8 @@ public class Club implements IFirebaseModel {
     public Map<String, Boolean> getActivityIds() { return activityIds; }
 
     public Map<String, Boolean> getScheduleIds() { return scheduleIds; }
+
+    public Map<String, Boolean> getStarredUserIds() { return starredUserIds; }
 
     public void setName(String name) {
         this.name = name;
@@ -103,6 +121,23 @@ public class Club implements IFirebaseModel {
 
     public void appendScheduleId(String scheduleId) { this.scheduleIds.put(scheduleId, true); }
 
+    public void appendStarredUserIds(String userId) { this.starredUserIds.put(userId, true); }
+
+    public void removeActiviyId(String activityId) { this.activityIds.remove(activityId); }
+
+    public void removeScheduleId(String scheduleId) { this.scheduleIds.remove(scheduleId); }
+
+    public void removeStarredUserIds(String userId) { this.starredUserIds.remove(userId); }
+
+    public boolean isStarred(String userId) {
+        if(starredUserIds.containsKey(userId) && starredUserIds.get(userId)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     @Override
     @Exclude
     public Map<String, Object> toMap() {
@@ -115,6 +150,9 @@ public class Club implements IFirebaseModel {
         result.put("hasClubroom", hasClubroom);
         result.put("tagId", tagId);
         result.put("adminId", adminId);
+        result.put("activityIds", activityIds);
+        result.put("scheduleIds", scheduleIds);
+        result.put("starredUserIds", starredUserIds);
 
         return result;
     }
