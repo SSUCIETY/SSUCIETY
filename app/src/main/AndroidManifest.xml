@@ -31,9 +31,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity">
-
-        </activity>
         <activity android:name=".activities.FacebookLoginActivity" />
         <activity
             android:name=".activities.clublist.ClubListActivity"
