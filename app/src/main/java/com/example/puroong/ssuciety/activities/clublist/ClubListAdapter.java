@@ -43,16 +43,19 @@ public class ClubListAdapter extends ArrayAdapter<Club> {
         tvClubName.setText(club.getName());
         tvClubIntro.setText(club.getIntroduction());
 
+        // TODO: set uid with firebase auth currentuser uid
+        final String uid = "";
+
         toggleStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(club.isStarred("test")){
+                if(club.isStarred(uid)){
                     toggleStar.setImageResource(android.R.drawable.star_big_off);
-                    // TODO: Remove user uid from club starredUserIds
+                    club.appendStarredUserIds(uid);
                 }
                 else{
                     toggleStar.setImageResource(android.R.drawable.star_big_on);
-                    // TODO: Append user uid to club starredUserIds
+                    club.removeStarredUserIds(uid);
                 }
             }
         });
