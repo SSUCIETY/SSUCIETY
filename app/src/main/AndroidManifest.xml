@@ -43,10 +43,18 @@
             android:label="일정 보기">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.activities.clubinfo.Clubinfomation"
+            android:label="@string/title_activity_clubinfomation"
+            android:theme="@style/AppTheme.NoActionBar">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity android:name=".activities.activities.clubinfo.Clubinf" />
+        <activity android:name=".activities.activities.clubinfo.ClubSchedule"></activity>
     </application>
 
 </manifest>

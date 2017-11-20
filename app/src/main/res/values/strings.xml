@@ -13,4 +13,8 @@
         <item>창작</item>
         <item>학술</item>
     </string-array>
+    <string name="title_activity_club_infomation">ClubInfomation</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_clubinfomation">Clubinfomation</string>
 </resources>
