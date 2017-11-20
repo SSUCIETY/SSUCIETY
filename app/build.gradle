@@ -31,8 +31,10 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:10.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.22.1'
     compile 'com.android.support:design:26.+'
+    compile 'com.prolificinteractive:material-calendarview:1.4.3'
     testCompile 'junit:junit:4.12'
 }
+
 
 
 

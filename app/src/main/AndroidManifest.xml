@@ -36,6 +36,11 @@
             android:name=".activities.clublist.ClubListActivity"
             android:label="@string/title_activity_club_list"
             android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".activities.MyScheduleActivity"
+            android:label="일정 보기">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
