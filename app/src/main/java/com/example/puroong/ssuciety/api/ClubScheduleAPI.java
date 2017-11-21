@@ -1,6 +1,8 @@
 package com.example.puroong.ssuciety.api;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.puroong.ssuciety.models.Club;
 import com.example.puroong.ssuciety.models.ClubSchedule;
@@ -32,6 +34,22 @@ public class ClubScheduleAPI {
         }
 
         return instance;
+    }
+
+    public void getClubScheduleByKey(String key, final Context context, final AfterQueryListener listener){
+        DatabaseReference clubScheduleRef = FirebaseDatabase.getInstance().getReference().child(databaseName);
+
+        clubScheduleRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.afterQuery(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to get club schedule by key", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void registerClubSchedule(final ClubSchedule clubSchedule){

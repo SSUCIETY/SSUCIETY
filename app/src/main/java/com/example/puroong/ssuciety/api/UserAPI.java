@@ -1,6 +1,8 @@
 package com.example.puroong.ssuciety.api;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.puroong.ssuciety.models.User;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +32,22 @@ public class UserAPI {
         }
 
         return instance;
+    }
+
+    public void getUserByUid(String uid, final Context context, final AfterQueryListener listener){
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child(databaseName);
+
+        userRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.afterQuery(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to get user by uid", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void registerUser(String uid, User user){

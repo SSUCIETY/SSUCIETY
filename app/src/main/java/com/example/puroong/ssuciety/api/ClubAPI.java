@@ -1,5 +1,6 @@
 package com.example.puroong.ssuciety.api;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -35,6 +36,22 @@ public class ClubAPI {
         }
 
         return instance;
+    }
+
+    public void getClubByKey(String key, final Context context, final AfterQueryListener listener){
+        DatabaseReference clubRef = FirebaseDatabase.getInstance().getReference().child(databaseName);
+
+        clubRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.afterQuery(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to get club by key", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void registerClub(Club club){
