@@ -36,6 +36,38 @@ public class ClubScheduleAPI {
         return instance;
     }
 
+    public void getAllClubSchedules(final Context context, final AfterQueryListener listener) {
+        DatabaseReference clubScheduleRef = FirebaseDatabase.getInstance().getReference().child(databaseName);
+
+        clubScheduleRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.afterQuery(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to get club schedules by clubId", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getClubSchedulesByClubId(String clubId, final Context context, final AfterQueryListener listener){
+        DatabaseReference clubScheduleRef = FirebaseDatabase.getInstance().getReference().child(databaseName);
+
+        clubScheduleRef.orderByChild("clubId").equalTo(clubId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.afterQuery(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to get club schedules", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void getClubScheduleByKey(String key, final Context context, final AfterQueryListener listener){
         DatabaseReference clubScheduleRef = FirebaseDatabase.getInstance().getReference().child(databaseName);
 
@@ -67,7 +99,7 @@ public class ClubScheduleAPI {
                 childUpdates.put(clubScheduleDatabasePath, clubScheduleValues);
 
                 String clubKey = dataSnapshot.getKey();
-                Club club = dataSnapshot.getValue(Club.class);
+                Club club = new Club(dataSnapshot);
                 club.appendScheduleId(clubScheduleKey);
                 Map<String, Object> clubValues = club.toMap();
                 String clubDatabasePath = "/"+ClubAPI.databaseName+"/"+clubKey;
@@ -93,7 +125,7 @@ public class ClubScheduleAPI {
         rootRef.child(databaseName).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ClubSchedule temp = dataSnapshot.getValue(ClubSchedule.class);
+                ClubSchedule temp = new ClubSchedule(dataSnapshot);
                 String clubKey = temp.getClubId();
 
                 rootRef.child(ClubAPI.databaseName).child(clubKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -106,7 +138,7 @@ public class ClubScheduleAPI {
                         childUpdates.put(clubScheduleDatabasePath, clubScheduleValues);
 
                         String clubKey = dataSnapshot.getKey();
-                        Club club = dataSnapshot.getValue(Club.class);
+                        Club club = new Club(dataSnapshot);
                         club.appendActiviyId(finalClubScheduleKey);
                         Map<String, Object> clubValues = club.toMap();
                         String clubDatabasePath = "/"+ClubAPI.databaseName+"/"+clubKey;
@@ -129,7 +161,7 @@ public class ClubScheduleAPI {
         });
     }
 
-    public void removeClubSchedule(String key){
+    public void removeClubSchedule(final String key){
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         final String finalClubScheduleKey = key;
 
@@ -138,7 +170,7 @@ public class ClubScheduleAPI {
         rootRef.child(databaseName).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ClubSchedule temp = dataSnapshot.getValue(ClubSchedule.class);
+                ClubSchedule temp = new ClubSchedule(dataSnapshot);
                 String clubKey = temp.getClubId();
 
                 rootRef.child(ClubAPI.databaseName).child(clubKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -150,8 +182,8 @@ public class ClubScheduleAPI {
                         childUpdates.put(clubScheduleDatabasePath, null);
 
                         String clubKey = dataSnapshot.getKey();
-                        Club club = dataSnapshot.getValue(Club.class);
-                        club.appendScheduleId(null);
+                        Club club = new Club(dataSnapshot);
+                        club.removeScheduleId(key);
                         Map<String, Object> clubValues = club.toMap();
                         String clubDatabasePath = "/"+ClubAPI.databaseName+"/"+clubKey;
                         childUpdates.put(clubDatabasePath, clubValues);

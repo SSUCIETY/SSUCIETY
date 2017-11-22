@@ -1,9 +1,7 @@
 package com.example.puroong.ssuciety.activities.clublist;
 
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,7 +18,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.puroong.ssuciety.R;
+import com.example.puroong.ssuciety.activities.ClubSubmitActivity;
+import com.example.puroong.ssuciety.activities.FacebookLoginActivity;
+import com.example.puroong.ssuciety.activities.MyScheduleActivity;
+import com.example.puroong.ssuciety.activities.manageclub.ManageClubActivity;
+import com.example.puroong.ssuciety.api.AfterQueryListener;
+import com.example.puroong.ssuciety.api.ClubAPI;
+import com.example.puroong.ssuciety.api.UserAPI;
 import com.example.puroong.ssuciety.models.Club;
+import com.example.puroong.ssuciety.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -30,11 +43,37 @@ public class ClubListActivity extends AppCompatActivity
     private TextView tagText;
     private Spinner tagType;
     private ListView clubList;
+    private boolean userIsInteracting;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            startActivity(new Intent(getApplicationContext(), FacebookLoginActivity.class));
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_club_list);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        UserAPI.getInstance().getUserByUid(uid, getApplicationContext(), new AfterQueryListener() {
+            @Override
+            public void afterQuery(DataSnapshot dataSnapshot) {
+                updateUI();
+            }
+        });
+    }
+    private void updateUI() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,12 +83,25 @@ public class ClubListActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         // hide manage_club/register_club menu item
-        Menu navMenu = navigationView.getMenu();
-        // TODO: if user owns club, hide register_club
-        // TODO: if user does not own club, hide manage_club
+        final Menu navMenu = navigationView.getMenu();
+
+        User user = UserAPI.getInstance().getCurrentUser();
+
+        MenuItem registerClub = navMenu.findItem(R.id.register_club);
+        MenuItem manageClub = navMenu.findItem(R.id.manage_club);
+
+        if(user.getManagingClubId() == null) {
+            manageClub.setVisible(false);
+            registerClub.setVisible(true);
+        } else {
+            manageClub.setVisible(true);
+            registerClub.setVisible(false);
+        }
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -61,29 +113,69 @@ public class ClubListActivity extends AppCompatActivity
         String text = tagType.getSelectedItem().toString();
         tagText.setText(text);
 
-        // set listview content
-        ArrayList<Club> clubs = new ArrayList<>();
-
-        // TODO: fetch and set club items
-
-        ClubListAdapter adapter = new ClubListAdapter(ClubListActivity.this, clubs);
+        final ClubListAdapter adapter = new ClubListAdapter(ClubListActivity.this, new ArrayList<Club>());
         clubList.setAdapter(adapter);
+
+        // set listview content
+        rootRef.child(ClubAPI.databaseName).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Club club = new Club(dataSnapshot);
+
+                if(club.getTagId().equals(tagText.getText().toString())){
+                    adapter.add(club);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Club club = new Club(dataSnapshot);
+
+                if(club.getTagId().equals(tagText.getText().toString())){
+                    adapter.updateByKey(club.getKey(), club);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Club club = new Club(dataSnapshot);
+
+                if(club.getTagId().equals(tagText.getText().toString())){
+                    adapter.removeByKey(club.getKey());
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         // set spinner click listener
         tagType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(userIsInteracting){
+                    String text = tagType.getSelectedItem().toString();
+                    tagText.setText(text);
 
-                String text = tagType.getSelectedItem().toString();
-                tagText.setText(text);
+                    // set listview content
+                    ClubAPI.getInstance().getClubsByTag(tagText.getText().toString(), getApplicationContext(), new AfterQueryListener() {
+                        @Override
+                        public void afterQuery(DataSnapshot dataSnapshot) {
+                            adapter.clear();
 
-                // set listview content
-                ArrayList<Club> clubs = new ArrayList<>();
-
-                // TODO: fetch club and set clearitems
-
-                ClubListAdapter adapter = new ClubListAdapter(ClubListActivity.this, clubs);
-                clubList.setAdapter(adapter);
+                            for(DataSnapshot clubSnapshot : dataSnapshot.getChildren()){
+                                adapter.add(new Club(clubSnapshot));
+                            }
+                        }
+                    });
+                }
             }
 
             @Override
@@ -91,6 +183,11 @@ public class ClubListActivity extends AppCompatActivity
 
             }
         });
+    }
+    @Override
+    public void onUserInteraction(){
+        super.onUserInteraction();
+        userIsInteracting = true;
     }
 
     @Override
@@ -112,11 +209,12 @@ public class ClubListActivity extends AppCompatActivity
         if (id == R.id.profile) {
             // TODO: move to profile actiity
         } else if (id == R.id.register_club) {
-            // TODO: move to reigister club activity
+            startActivity(new Intent(getApplicationContext(), ClubSubmitActivity.class));
         } else if (id == R.id.manage_club) {
-            // TODO: move to manage club activity
+            startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
         } else if (id == R.id.my_schedules) {
-            // TODO: move to schedule activity
+            startActivity(new Intent(getApplicationContext(), MyScheduleActivity.class));
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

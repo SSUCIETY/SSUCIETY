@@ -1,5 +1,6 @@
 package com.example.puroong.ssuciety.models;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class User implements IFirebaseModel {
+    private String uid;
     private String name;
     private String email;
     private String phoneNumber;
@@ -25,6 +27,25 @@ public class User implements IFirebaseModel {
 
     private User(){}
 
+    public User(DataSnapshot dataSnapshot){
+        User user = dataSnapshot.getValue(User.class);
+
+        this.uid = dataSnapshot.getKey();
+        this.name = user.name;
+        this.email = user.email;
+        this.phoneNumber = user.phoneNumber;
+        this.profileLink = user.profileLink;
+        this.major = user.major;
+        this.admissionYear = user.admissionYear;
+        this.gender = user.gender;
+        this.managingClubId = user.managingClubId;
+        this.starredClubIds = user.starredClubIds;
+
+        if(this.starredClubIds == null){
+            this.starredClubIds = new HashMap<>();
+        }
+    }
+
     public User(String name, String email, String phoneNumber, String profileLink, String major, int admissionYear, int gender, String managingClubId, Map<String, Boolean> starredClubIds) {
         this.name = name;
         this.email = email;
@@ -35,6 +56,14 @@ public class User implements IFirebaseModel {
         this.gender = gender;
         this.managingClubId = managingClubId;
         this.starredClubIds = starredClubIds;
+
+        if(this.starredClubIds == null){
+            this.starredClubIds = new HashMap<>();
+        }
+    }
+
+    public String getUid() {
+        return uid;
     }
 
     public String getName() {
@@ -71,6 +100,10 @@ public class User implements IFirebaseModel {
 
     public Map<String, Boolean> getStarredClubIds() {
         return starredClubIds;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public void setName(String name) {
@@ -113,6 +146,10 @@ public class User implements IFirebaseModel {
         this.starredClubIds.put(clubId, true);
     }
 
+    public void removeStarredClubId(String clubId){
+        this.starredClubIds.remove(clubId);
+    }
+
     @Override
     @Exclude
     public Map<String, Object> toMap() {
@@ -125,7 +162,7 @@ public class User implements IFirebaseModel {
         result.put("major", major);
         result.put("admissionYear", admissionYear);
         result.put("gender", gender);
-        result.put("managinClubId", managingClubId);
+        result.put("managingClubId", managingClubId);
         result.put("starredClubIds", starredClubIds);
 
         return result;

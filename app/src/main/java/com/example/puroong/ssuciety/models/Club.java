@@ -3,6 +3,7 @@ package com.example.puroong.ssuciety.models;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -17,6 +18,7 @@ import java.util.Set;
 
 @IgnoreExtraProperties
 public class Club implements IFirebaseModel {
+    private String key;
     private String name;
     private String wallpaperLink;
     private String introduction;
@@ -29,6 +31,32 @@ public class Club implements IFirebaseModel {
     private Map<String, Boolean> starredUserIds;
 
     private Club(){}
+
+    public Club(DataSnapshot dataSnapshot){
+        Club club = dataSnapshot.getValue(Club.class);
+
+        this.key = dataSnapshot.getKey();
+        this.name = club.getName();
+        this.wallpaperLink = club.getWallpaperLink();
+        this.introduction = club.getIntroduction();
+        this.description = club.getDescription();
+        this.hasClubroom = club.isHasClubroom();
+        this.tagId = club.getTagId();
+        this.adminId = club.getAdminId();
+        this.activityIds = club.getActivityIds();
+        this.scheduleIds = club.getScheduleIds();
+        this.starredUserIds = club.getStarredUserIds();
+
+        if(this.activityIds == null){
+            this.activityIds = new HashMap<>();
+        }
+        if(this.scheduleIds == null){
+            this.scheduleIds = new HashMap<>();
+        }
+        if(this.starredUserIds == null){
+            this.starredUserIds = new HashMap<>();
+        }
+    }
 
     public Club(String name, String wallpaperLink, String introduction, String description, boolean hasClubroom, String tagId, String adminId, Map<String, Boolean> activityIds, Map<String, Boolean> scheduleIds, Map<String, Boolean> starredUserIds) {
         this.name = name;
@@ -52,6 +80,8 @@ public class Club implements IFirebaseModel {
             this.starredUserIds = new HashMap<>();
         }
     }
+
+    public String getKey() { return key; }
 
     public String getName() {
         return name;
@@ -86,6 +116,8 @@ public class Club implements IFirebaseModel {
     public Map<String, Boolean> getScheduleIds() { return scheduleIds; }
 
     public Map<String, Boolean> getStarredUserIds() { return starredUserIds; }
+
+    public void setKey(String key) { this.key = key; }
 
     public void setName(String name) {
         this.name = name;

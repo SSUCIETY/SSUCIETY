@@ -31,22 +31,54 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FacebookLoginActivity" />
+        <activity
+            android:name=".activities.FacebookLoginActivity"
+            android:launchMode="singleInstance"
+            android:label="로그인"/>
         <activity
             android:name=".activities.clublist.ClubListActivity"
-            android:label="@string/title_activity_club_list"
+            android:label="동아리 목록"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity
-            android:name=".activities.MyScheduleActivity"
-            android:label="일정 보기">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.MyScheduleActivity"
+            android:launchMode="singleInstance"
+            android:label="일정 보기" />
+        <activity
+            android:name=".activities.ClubSubmitActivity"
+            android:launchMode="singleInstance"
+            android:label="동아리 등록" />
+        <activity
+            android:name=".activities.manageclub.ManageClubActivity"
+            android:label="동아리 관리"
+            android:launchMode="singleInstance"/>
+        <activity
+            android:name=".activities.ClubUpdateActivity"
+            android:launchMode="singleInstance"
+            android:label="동아리 수정"/>
+        <activity
+            android:name=".activities.clubschedulemanage.ClubScheduleManageActivity"
+            android:launchMode="singleInstance"
+            android:label="동아리 일정 관리"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.ClubScheduleSubmitActivity"
+            android:launchMode="singleInstance"
+            android:label="동아리 일정 추가" />
+        <activity
+            android:name=".activities.ClubScheduleUpdateActivity"
+            android:launchMode="singleInstance"
+            android:label="동아리 일정 수정"/>
+        <activity
+            android:name=".activities.ClubAdminTransferActivity"
+            android:launchMode="singleInstance"
+            android:label="관리자 양도"/>
     </application>
 
 </manifest>

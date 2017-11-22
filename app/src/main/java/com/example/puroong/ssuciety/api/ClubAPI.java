@@ -54,6 +54,47 @@ public class ClubAPI {
         });
     }
 
+    public void getClubsByTag(String tagName, final Context context, final AfterQueryListener listener){
+        DatabaseReference clubRef = FirebaseDatabase.getInstance().getReference().child(databaseName);
+
+        clubRef.orderByChild("tagId").equalTo(tagName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.afterQuery(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to get clubs by context", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void toggleStarClub(String clubKey, Club club, User user, boolean shouldStar) {
+        final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if(shouldStar) {
+            club.appendStarredUserIds(uid);
+            user.appendStarredClubId(clubKey);
+        } else {
+            club.removeStarredUserIds(uid);
+            user.removeStarredClubId(clubKey);
+        }
+        Map<String, Object> clubValues = club.toMap();
+        String clubDatabasePath = "/"+databaseName+"/"+clubKey;
+        childUpdates.put(clubDatabasePath, clubValues);
+
+        Map<String, Object> userValues = user.toMap();
+        String userDatabasePath = "/"+UserAPI.databaseName+"/"+uid;
+        childUpdates.put(userDatabasePath, userValues);
+
+        rootRef.updateChildren(childUpdates);
+    }
+
     public void registerClub(Club club){
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         final Club finalClub = club;
@@ -89,67 +130,34 @@ public class ClubAPI {
         });
     }
 
-    public void updateClub(String key, Club club){
+    public void updateClub(String clubKey, Club club){
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         final Club finalClub = club;
-        final String finalClubKey = key;
 
-        rootRef.child(UserAPI.databaseName).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> childUpdates = new HashMap<>();
+        Map<String, Object> childUpdates = new HashMap<>();
 
-                String clubKey = finalClubKey;
-                Map<String, Object> clubValues = finalClub.toMap();
-                String clubDatabasePath = "/"+databaseName+"/"+clubKey;
-                childUpdates.put(clubDatabasePath, clubValues);
+        Map<String, Object> clubValues = finalClub.toMap();
+        String clubDatabasePath = "/"+databaseName+"/"+clubKey;
+        childUpdates.put(clubDatabasePath, clubValues);
 
-                String userKey = dataSnapshot.getKey();
-                User user = dataSnapshot.getValue(User.class);
-                user.setManagingClubId(clubKey);
-                Map<String, Object> userValues = user.toMap();
-                String userDatabasePath = "/"+UserAPI.databaseName+"/"+userKey;
-                childUpdates.put(userDatabasePath, userValues);
-
-                rootRef.updateChildren(childUpdates);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "updateClub canceled");
-            }
-        });
+        rootRef.updateChildren(childUpdates);
     }
 
-    public void removeClub(String key){
+    public void removeClub(String clubKey){
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        final String finalClubKey = key;
 
-        rootRef.child(UserAPI.databaseName).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> childUpdates = new HashMap<>();
+        Map<String, Object> childUpdates = new HashMap<>();
 
-                String clubKey = finalClubKey;
-                String clubDatabasePath = "/"+databaseName+"/"+clubKey;
-                childUpdates.put(clubDatabasePath, null);
+        String clubDatabasePath = "/"+databaseName+"/"+clubKey;
+        childUpdates.put(clubDatabasePath, null);
 
-                String userKey = dataSnapshot.getKey();
-                User user = dataSnapshot.getValue(User.class);
-                user.setManagingClubId(null);
-                Map<String, Object> userValues = user.toMap();
-                String userDatabasePath = "/"+UserAPI.databaseName+"/"+userKey;
-                childUpdates.put(userDatabasePath, userValues);
+        String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        User user = UserAPI.getInstance().getCurrentUser();
+        user.setManagingClubId(null);
+        Map<String, Object> userValues = user.toMap();
+        String userDatabasePath = "/"+UserAPI.databaseName+"/"+userKey;
+        childUpdates.put(userDatabasePath, userValues);
 
-                rootRef.updateChildren(childUpdates);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "updateClub canceled");
-            }
-        });
+        rootRef.updateChildren(childUpdates);
     }
 }
