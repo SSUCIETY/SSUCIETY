@@ -2,13 +2,12 @@ package com.example.puroong.ssuciety.activities;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.puroong.ssuciety.R;
-import com.example.puroong.ssuciety.api.AfterQueryListener;
+import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.api.ClubAPI;
 import com.example.puroong.ssuciety.api.ClubScheduleAPI;
 import com.example.puroong.ssuciety.api.UserAPI;

@@ -3,7 +3,6 @@ package com.example.puroong.ssuciety.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,7 +11,7 @@ import android.widget.Spinner;
 
 import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.activities.clubschedulemanage.ClubScheduleManageActivity;
-import com.example.puroong.ssuciety.api.AfterQueryListener;
+import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.api.ClubAPI;
 import com.example.puroong.ssuciety.api.ClubScheduleAPI;
 import com.example.puroong.ssuciety.api.UserAPI;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.models.Club;
 import com.example.puroong.ssuciety.models.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by puroong on 11/11/17.

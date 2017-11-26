@@ -11,7 +11,7 @@ import android.widget.Spinner;
 
 import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.activities.clubschedulemanage.ClubScheduleManageActivity;
-import com.example.puroong.ssuciety.api.AfterQueryListener;
+import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.api.ClubAPI;
 import com.example.puroong.ssuciety.api.ClubScheduleAPI;
 import com.example.puroong.ssuciety.api.UserAPI;

@@ -3,7 +3,6 @@ package com.example.puroong.ssuciety.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,8 +10,7 @@ import android.widget.Toast;
 
 import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.activities.clublist.ClubListActivity;
-import com.example.puroong.ssuciety.activities.manageclub.ManageClubActivity;
-import com.example.puroong.ssuciety.api.AfterQueryListener;
+import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.api.UserAPI;
 import com.example.puroong.ssuciety.models.User;
 import com.google.firebase.database.DataSnapshot;

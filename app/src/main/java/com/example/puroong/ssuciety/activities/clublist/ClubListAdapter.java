@@ -1,6 +1,8 @@
 package com.example.puroong.ssuciety.activities.clublist;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,10 @@ import android.widget.Toast;
 import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.api.ClubAPI;
 import com.example.puroong.ssuciety.api.UserAPI;
+import com.example.puroong.ssuciety.listeners.AfterImageLoadListener;
 import com.example.puroong.ssuciety.models.Club;
 import com.example.puroong.ssuciety.models.User;
+import com.example.puroong.ssuciety.utils.ImageUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ import java.util.List;
 
 public class ClubListAdapter extends ArrayAdapter<Club> {
     private List<Club> clubs = new ArrayList<>();
+    private Handler handler = new Handler();
 
     public ClubListAdapter(Context context, ArrayList<Club> clubs) {
         super(context, 0, clubs);
@@ -67,15 +72,23 @@ public class ClubListAdapter extends ArrayAdapter<Club> {
 
         // Get the data item for this position
         final Club club = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.club_list_item, parent, false);
-        }
+        // inflate the view; ah molla da async ddaemooniya
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.club_list_item, parent, false);
+
         // Lookup view for data population
         TextView tvClubName = (TextView) convertView.findViewById(R.id.tvClubName);
         TextView tvClubIntro = (TextView) convertView.findViewById(R.id.tvClubIntro);
         final ImageView toggleStar = (ImageView) convertView.findViewById(R.id.ivToggleStar);
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        final View finalConvertView = convertView;
+        ImageUtil.getInstance().loadImage(getContext(), handler, club.getWallpaperLink(), new AfterImageLoadListener() {
+            @Override
+            public void setImage(Bitmap bitmap) {
+                ImageView iv = finalConvertView.findViewById(R.id.ivClubWallpaper);
+                ImageUtil.getInstance().setImage(iv, bitmap, false);
+            }
+        });
 
         // Populate the data into the template view using the data object
         tvClubName.setText(club.getName());
