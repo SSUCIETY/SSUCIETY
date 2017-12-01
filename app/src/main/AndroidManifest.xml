@@ -3,6 +3,7 @@
     package="com.example.puroong.ssuciety">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -34,24 +35,29 @@
         <activity
             android:name=".activities.clublist.ClubListActivity"
             android:label="@string/title_activity_club_list"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MyScheduleActivity"
-            android:label="일정 보기">
-        </activity>
+            android:label="일정 보기" />
         <activity
             android:name=".activities.activities.clubinfo.Clubinfomation"
             android:label="@string/title_activity_clubinfomation"
             android:theme="@style/AppTheme.NoActionBar">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activities.activities.clubinfo.Clubinf" />
-        <activity android:name=".activities.activities.clubinfo.ClubSchedule"></activity>
+        <activity android:name=".activities.activities.clubinfo.ClubSchedule" />
+        <activity
+            android:name=".activities.activities.managepic.ManagePic"
+            android:label="@string/title_activity_manage_pic"
+            android:theme="@style/AppTheme.NoActionBar" >
+
+        </activity>
+        <activity android:name=".activities.activities.managepic.SelectPic"></activity>
     </application>
 
 </manifest>

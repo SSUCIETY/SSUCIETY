@@ -14,14 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-    <ImageView
+        <ImageView
         android:id="@+id/actpic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_report_image"
         android:layout_weight="0.20" />
 
-    <TextView
+        <TextView
         android:layout_gravity="center"
         android:id="@+id/actpicname"
         android:layout_width="wrap_content"
