@@ -42,9 +42,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.MyScheduleActivity"
@@ -90,6 +87,8 @@
             android:name=".activities.managepic.SelectPic"
             android:label="활동사진 추가" />
         <activity android:name=".activities.managepic.UpdatePic"></activity>
+        <activity android:name=".profile_modified" />
+        <activity android:name=".profile_see" />
     </application>
 
 </manifest>
