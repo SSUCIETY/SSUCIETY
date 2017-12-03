@@ -1,4 +1,4 @@
-package com.example.puroong.ssuciety.activities.activities.managepic;
+package com.example.puroong.ssuciety.activities.managepic;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.models.ClubActivity;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 /**

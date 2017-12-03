@@ -40,15 +40,15 @@
             android:name=".activities.MyScheduleActivity"
             android:label="일정 보기" />
         <activity
-            android:name=".activities.activities.clubinfo.Clubinfomation"
+            android:name=".activities.clubinfo.Clubinfomation"
             android:label="동아리 정보"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.activities.managepic.ManagePic"
+            android:name=".activities.managepic.ManagePic"
             android:label="활동사진 관리"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.activities.managepic.SelectPic"
+            android:name=".activities.managepic.SelectPic"
             android:label="활동사진 추가" />
     </application>
 

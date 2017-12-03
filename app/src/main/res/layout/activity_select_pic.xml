@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.puroong.ssuciety.activities.activities.managepic.SelectPic">
+    tools:context=".activities.managepic.SelectPic">
 
     <ImageView
         android:layout_marginTop="50dp"

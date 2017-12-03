@@ -1,4 +1,4 @@
-package com.example.puroong.ssuciety.activities.activities.managepic;
+package com.example.puroong.ssuciety.activities.managepic;
 
 import android.content.Intent;
 import android.os.Bundle;

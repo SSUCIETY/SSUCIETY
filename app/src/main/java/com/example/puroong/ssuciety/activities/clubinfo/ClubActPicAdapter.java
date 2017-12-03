@@ -1,4 +1,4 @@
-package com.example.puroong.ssuciety.activities.activities.clubinfo;
+package com.example.puroong.ssuciety.activities.clubinfo;
 
 import android.content.Context;
 import android.view.LayoutInflater;
