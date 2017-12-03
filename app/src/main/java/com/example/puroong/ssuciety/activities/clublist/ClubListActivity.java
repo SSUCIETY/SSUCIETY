@@ -23,6 +23,7 @@ import com.example.puroong.ssuciety.activities.FacebookLoginActivity;
 import com.example.puroong.ssuciety.activities.MyScheduleActivity;
 import com.example.puroong.ssuciety.activities.clubinfo.Clubinfomation;
 import com.example.puroong.ssuciety.activities.manageclub.ManageClubActivity;
+import com.example.puroong.ssuciety.activities.profile_see;
 import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.api.ClubAPI;
 import com.example.puroong.ssuciety.api.UserAPI;
@@ -219,7 +220,7 @@ public class ClubListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.profile) {
-            // TODO: move to profile actiity
+            startActivity(new Intent(getApplicationContext(), profile_see.class));
         } else if (id == R.id.register_club) {
             startActivity(new Intent(getApplicationContext(), ClubSubmitActivity.class));
         } else if (id == R.id.manage_club) {

@@ -3,6 +3,7 @@ package com.example.puroong.ssuciety.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +37,11 @@ public class ClubAdminTransferActivity extends AppCompatActivity {
                     @Override
                     public void afterQuery(DataSnapshot dataSnapshot) {
                         // TODO: have to use datasnap getchildren
+                        int len = 0;
+
                         for(DataSnapshot clubScheduleSnapshot:dataSnapshot.getChildren()){
+                            len++;
+
                             if(clubScheduleSnapshot.getValue(User.class) != null){
                                 User newAdmin = new User(clubScheduleSnapshot);
 
@@ -52,6 +57,9 @@ public class ClubAdminTransferActivity extends AppCompatActivity {
                             else{
                                 Toast.makeText(getApplicationContext(), "no such user", Toast.LENGTH_SHORT).show();
                             }
+                        }
+                        if(len == 0){
+                            Toast.makeText(getApplicationContext(), "no such user", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

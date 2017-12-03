@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.puroong.ssuciety.R;
@@ -43,6 +44,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "LOGIN SUCCESS");
+                loginButton.setVisibility(View.INVISIBLE);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -76,9 +78,11 @@ public class FacebookLoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                             //TODO: move to profile edit activity
+                            Intent intent = new Intent(getApplicationContext(), profile_modified.class);
+                            startActivity(intent);
+                            finish();
                             //INFO: can get facebook  user info by Profile.getCurrentProfile().getXXX()
                         } else {
                             // If sign in fails, display a message to the user.

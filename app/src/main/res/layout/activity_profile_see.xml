@@ -44,7 +44,7 @@
                     android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:gravity="right" />
             </LinearLayout>
 
             <LinearLayout
@@ -62,7 +62,7 @@
                     android:id="@+id/tvMajor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:gravity="right" />
             </LinearLayout>
 
             <LinearLayout
@@ -81,7 +81,7 @@
                     android:id="@+id/tvYear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:gravity="right" />
             </LinearLayout>
 
             <LinearLayout
@@ -100,7 +100,7 @@
                     android:id="@+id/tvContact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right" />
+                    android:gravity="right" />
             </LinearLayout>
 
         </LinearLayout>
