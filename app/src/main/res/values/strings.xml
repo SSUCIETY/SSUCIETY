@@ -12,5 +12,4 @@
         <item>창작</item>
         <item>학술</item>
     </string-array>
-    <string name="title_activity_club_schedule_manage">ClubScheduleManageActivity</string>
 </resources>

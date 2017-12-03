@@ -79,6 +79,18 @@
             android:name=".activities.ClubAdminTransferActivity"
             android:launchMode="singleInstance"
             android:label="관리자 양도"/>
+
+        <activity
+            android:name=".activities.clubinfo.Clubinfomation"
+            android:label="동아리 정보"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.managepic.ManagePic"
+            android:label="활동사진 관리"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.managepic.SelectPic"
+            android:label="활동사진 추가" />
     </application>
 
 </manifest>
