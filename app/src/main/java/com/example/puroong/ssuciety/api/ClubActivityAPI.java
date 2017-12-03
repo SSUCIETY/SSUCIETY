@@ -67,7 +67,7 @@ public class ClubActivityAPI {
                 childUpdates.put(clubActivityDatabasePath, clubActivityValues);
 
                 String clubKey = dataSnapshot.getKey();
-                Club club = dataSnapshot.getValue(Club.class);
+                Club club = new Club(dataSnapshot);
                 club.appendActiviyId(clubActivityKey);
                 Map<String, Object> clubValues = club.toMap();
                 String clubDatabasePath = "/"+ClubAPI.databaseName+"/"+clubKey;
@@ -106,7 +106,7 @@ public class ClubActivityAPI {
                         childUpdates.put(clubActivityDatabasePath, clubActivityValues);
 
                         String clubKey = dataSnapshot.getKey();
-                        Club club = dataSnapshot.getValue(Club.class);
+                        Club club = new Club(dataSnapshot);
                         club.appendActiviyId(finalClubActivityKey);
                         Map<String, Object> clubValues = club.toMap();
                         String clubDatabasePath = "/"+ClubAPI.databaseName+"/"+clubKey;
@@ -138,8 +138,10 @@ public class ClubActivityAPI {
         rootRef.child(databaseName).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ClubActivity temp = dataSnapshot.getValue(ClubActivity.class);
+                final ClubActivity temp = dataSnapshot.getValue(ClubActivity.class);
                 String clubKey = temp.getClubId();
+
+//                Log.d("TAG", temp.getKey());
 
                 rootRef.child(ClubAPI.databaseName).child(clubKey).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -150,8 +152,8 @@ public class ClubActivityAPI {
                         childUpdates.put(clubActivityDatabasePath, null);
 
                         String clubKey = dataSnapshot.getKey();
-                        Club club = dataSnapshot.getValue(Club.class);
-                        club.appendActiviyId(null);
+                        Club club = new Club(dataSnapshot);
+                        club.removeActiviyId(finalClubActivityKey);
                         Map<String, Object> clubValues = club.toMap();
                         String clubDatabasePath = "/"+ClubAPI.databaseName+"/"+clubKey;
                         childUpdates.put(clubDatabasePath, clubValues);

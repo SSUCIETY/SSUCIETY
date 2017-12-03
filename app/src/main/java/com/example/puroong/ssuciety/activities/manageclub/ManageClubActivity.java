@@ -11,6 +11,7 @@ import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.activities.ClubAdminTransferActivity;
 import com.example.puroong.ssuciety.activities.ClubUpdateActivity;
 import com.example.puroong.ssuciety.activities.clubschedulemanage.ClubScheduleManageActivity;
+import com.example.puroong.ssuciety.activities.managepic.ManagePic;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,9 @@ public class ManageClubActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case 2:
+                        //  manage club activity
+                        intent = new Intent(getApplicationContext(), ManagePic.class);
+                        startActivity(intent);
                         break;
                     case 3:
                         // transfer admin

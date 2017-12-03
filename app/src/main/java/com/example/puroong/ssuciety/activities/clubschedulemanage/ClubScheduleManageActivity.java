@@ -99,10 +99,6 @@ public class ClubScheduleManageActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final ClubSchedule clubSchedule = adapter.getItem(position);
 
-                Log.d("TAG", "key: "+clubSchedule.getKey());
-                Log.d("TAG", "id: " + Long.toString(id));
-                Log.d("TAG", "position: " + Integer.toString(position));
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClubScheduleManageActivity.this);
                 builder.setTitle("일정")
                         .setItems(new String[]{"수정", "삭제"}, new DialogInterface.OnClickListener() {

@@ -1,27 +1,60 @@
 package com.example.puroong.ssuciety.activities.clubinfo;
 
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.puroong.ssuciety.R;
+import com.example.puroong.ssuciety.activities.MyScheduleActivity;
+import com.example.puroong.ssuciety.api.ClubAPI;
+import com.example.puroong.ssuciety.api.ClubActivityAPI;
+import com.example.puroong.ssuciety.api.ClubScheduleAPI;
+import com.example.puroong.ssuciety.api.UserAPI;
+import com.example.puroong.ssuciety.listeners.AfterImageLoadListener;
+import com.example.puroong.ssuciety.listeners.AfterQueryListener;
+import com.example.puroong.ssuciety.models.Club;
 import com.example.puroong.ssuciety.models.ClubActivity;
+import com.example.puroong.ssuciety.models.ClubSchedule;
+import com.example.puroong.ssuciety.models.User;
+import com.example.puroong.ssuciety.utils.ImageUtil;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Clubinfomation extends AppCompatActivity {
 
@@ -39,11 +72,15 @@ public class Clubinfomation extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private static String clubKey;
+    private static Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clubinfomation);
+
+        clubKey = getIntent().getStringExtra("clubKey");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,18 +94,7 @@ public class Clubinfomation extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,33 +142,197 @@ public class Clubinfomation extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView;
-            rootView = inflater.inflate(R.layout.clubinf, container,false);
+            View rootView = null;
+            final View finalRootView;
+
+            final User user = UserAPI.getInstance().getCurrentUser();
+            String clubId = null;
+
             switch ( getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 1:
                     rootView = inflater.inflate(R.layout.activity_clubinf, container, false);
+                    finalRootView = rootView;
+
+                    clubId = clubKey;
+
+                    ClubAPI.getInstance().getClubByKey(clubId, rootView.getContext(), new AfterQueryListener() {
+                        @Override
+                        public void afterQuery(DataSnapshot dataSnapshot) {
+                            final Club club = new Club(dataSnapshot);
+
+                            final ImageView clubWallpaper = (ImageView) finalRootView.findViewById(R.id.imageView2);
+                            final TextView clubName = (TextView) finalRootView.findViewById(R.id.club_name);
+                            final TextView clubDescription = (TextView) finalRootView.findViewById(R.id.club_explain);
+                            final TextView clubHasRoom = (TextView) finalRootView.findViewById(R.id.club_room_exist);
+                            final TextView clubTagType = (TextView) finalRootView.findViewById(R.id.club_tag);
+                            final TextView phoneNumber = (TextView) finalRootView.findViewById(R.id.club_phonenumber);
+
+                            // load image
+                            ImageUtil.getInstance().loadImage(finalRootView.getContext(), handler, club.getWallpaperLink(), new AfterImageLoadListener() {
+                                @Override
+                                public void setImage(Bitmap bitmap) {
+                                    ImageUtil.getInstance().setImage(clubWallpaper, bitmap, true);
+                                }
+                            });
+
+                            UserAPI.getInstance().getUserByUid(club.getAdminId(), finalRootView.getContext(), new AfterQueryListener() {
+                                @Override
+                                public void afterQuery(DataSnapshot dataSnapshot) {
+                                    User admin = new User(dataSnapshot);
+
+                                    String roomString = null;
+                                    if(club.isHasClubroom()){
+                                        roomString = "예";
+                                    } else {
+                                        roomString = "아니오";
+                                    }
+
+                                    // set the rest
+                                    clubName.setText(club.getName());
+                                    clubDescription.setText(club.getDescription());
+                                    clubHasRoom.setText(roomString);
+                                    clubTagType.setText(club.getTagId());
+                                    phoneNumber.setText(admin.getPhoneNumber());
+                                }
+                            });
+                        }
+                    });
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.activity_club_act_pic, container, false);
-                    ArrayList<ClubActivity> List= new ArrayList<ClubActivity>();
+                    finalRootView = rootView;
+
+                    clubId = user.getManagingClubId();
+
                     ListView listView = (ListView)rootView.findViewById(R.id.listview);
-                    ClubActPicAdapter cap= new ClubActPicAdapter(rootView.getContext(),List);
+                    final ClubActPicAdapter cap= new ClubActPicAdapter(rootView.getContext(), new ArrayList<ClubActivity>());
                     listView.setAdapter(cap);
-                    ClubActivity a= new ClubActivity("pic1","bbc","abc");
-                    ClubActivity b= new ClubActivity("pic1","cbc","gbc");
-                    ClubActivity c= new ClubActivity("pic1","dbc","fbc");
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    DatabaseReference clubActivityRef = FirebaseDatabase.getInstance().getReference().child(ClubActivityAPI.databaseName);
+
+                    final String finalClubId = clubId;
+                    clubActivityRef.addChildEventListener(new ChildEventListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            ClubActivity clubActivity = new ClubActivity(dataSnapshot);
+                            if(finalClubId.equals(clubActivity.getClubId())){
+                                cap.add(clubActivity);
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                            ClubActivity clubActivity = new ClubActivity(dataSnapshot);
+
+                            if(finalClubId.equals(clubActivity.getClubId())){
+                                cap.updateByKey(clubActivity.getKey(), clubActivity);
+                            }
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+                            ClubActivity clubActivity = new ClubActivity(dataSnapshot);
+
+                            if(finalClubId.equals(clubActivity.getClubId())){
+                                cap.removeByKey(clubActivity.getKey());
+                            }
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
                         }
                     });
-                    List.add(a);
-                    List.add(b);
-                    List.add(c);
+
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.activity_club_schedule, container, false);
+                    finalRootView = rootView;
+
+                    final Map<String, String> clubNames = new HashMap<>();
+
+                    ClubScheduleAPI.getInstance().getAllClubSchedules(rootView.getContext(), new AfterQueryListener() {
+                        @Override
+                        public void afterQuery(DataSnapshot dataSnapshot) {
+                            User user = UserAPI.getInstance().getCurrentUser();
+                            final ArrayList<ClubSchedule> clubSchedules = new ArrayList<ClubSchedule>();
+
+                            // filter club schedules
+                            clubSchedules.clear();
+                            for (DataSnapshot clubScheduleSnapshot : dataSnapshot.getChildren()) {
+                                final ClubSchedule clubSchedule = new ClubSchedule(clubScheduleSnapshot);
+
+                                if (user.getManagingClubId().equals(clubSchedule.getClubId())) {
+                                    if (clubNames.get(clubSchedule.getClubId()) == null) {
+                                        ClubAPI.getInstance().getClubByKey(clubSchedule.getClubId(), finalRootView.getContext(), new AfterQueryListener() {
+                                            @Override
+                                            public void afterQuery(DataSnapshot dataSnapshot) {
+                                                Club club = new Club(dataSnapshot);
+
+                                                clubNames.put(clubSchedule.getClubId(), club.getName());
+                                            }
+                                        });
+                                    }
+
+                                    clubSchedules.add(clubSchedule);
+                                }
+                            }
+                            // set calendar
+                            MaterialCalendarView view = (MaterialCalendarView) finalRootView.findViewById(R.id.calendarView);
+
+                            view.addDecorator(new DayViewDecorator() {
+                                @Override
+                                public boolean shouldDecorate(CalendarDay day) {
+                                    for(ClubSchedule clubSchedule : clubSchedules){
+                                        if(clubSchedule.isActiveSchedule(day)){
+                                            return true;
+                                        }
+                                    }
+
+                                    return false;
+                                }
+
+                                @Override
+                                public void decorate(DayViewFacade view) {
+                                    view.addSpan(new DotSpan(5, Color.RED));
+                                }
+                            });
+
+                            view.setOnDateChangedListener(new OnDateSelectedListener() {
+                                @Override
+                                public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
+                                    String title = date.getYear() + "." + date.getMonth() + "." + date.getDay();
+                                    ArrayList<String> events = new ArrayList<String>();
+
+                                    for(ClubSchedule clubSchedule : clubSchedules){
+                                        if(clubSchedule.isActiveSchedule(date)){
+                                            String clubScheduleString = clubNames.get(clubSchedule.getClubId()) + ": " + clubSchedule.getTitle() + "\n시작일: " + clubSchedule.getStartDate() + "\n종료일: " + clubSchedule.getEndDate();
+                                            events.add(clubScheduleString);
+                                        }
+                                    }
+
+                                    if(events.size() > 0){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(finalRootView.getContext());
+
+                                        builder.setTitle(title)
+                                                .setItems(events.toArray(new String[events.size()]), new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                    }
+                                                });
+
+                                        builder.create().show();
+                                    }
+                                }
+                            });
+                        }
+                    });
                     break;
             }
             return rootView;

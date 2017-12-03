@@ -16,15 +16,14 @@ import android.widget.Toast;
 
 import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.api.ClubActivityAPI;
-import com.example.puroong.ssuciety.api.UserAPI;
+import com.example.puroong.ssuciety.listeners.AfterImageLoadListener;
 import com.example.puroong.ssuciety.listeners.AfterImageUploadListener;
 import com.example.puroong.ssuciety.models.ClubActivity;
-import com.example.puroong.ssuciety.models.User;
 import com.example.puroong.ssuciety.utils.ImageUtil;
 
 import java.io.IOException;
 
-public class SelectPic extends AppCompatActivity {
+public class UpdatePic extends AppCompatActivity {
     private Handler handler = new Handler();
     private ImageView iv;
     private Uri ivUrl;
@@ -34,17 +33,26 @@ public class SelectPic extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_pic);
 
+        final ClubActivity clubActivity = getIntent().getParcelableExtra("clubActivity");
         final TextView tvname = (TextView) findViewById(R.id.edit_Picname);
         Button btn = (Button) findViewById(R.id.addpic);
         iv = (ImageView) findViewById(R.id.imageView4);
 
-        iv.setOnClickListener(new View.OnClickListener() {
+        ImageUtil.getInstance().loadImage(getApplicationContext(), handler, clubActivity.getPictureLink(), new AfterImageLoadListener() {
             @Override
-            public void onClick(View v) {
-                ImageUtil.getInstance().chooseImage(SelectPic.this);
+            public void setImage(Bitmap bitmap) {
+                ImageUtil.getInstance().setImage(iv, bitmap, true);
             }
         });
 
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageUtil.getInstance().chooseImage(UpdatePic.this);
+            }
+        });
+
+        tvname.setText(clubActivity.getName());
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,15 +62,10 @@ public class SelectPic extends AppCompatActivity {
                 ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
                     @Override
                     public void afterImageUpload(String downloadUrl) {
-                        User user = UserAPI.getInstance().getCurrentUser();
+                        clubActivity.setPictureLink(downloadUrl);
+                        clubActivity.setName(tvname.getText().toString());
 
-                        String name = tvname.getText().toString();
-                        String pictureLink = downloadUrl;
-                        String clubId = user.getManagingClubId();
-
-                        ClubActivity clubActivity = new ClubActivity(name, pictureLink, clubId);
-
-                        ClubActivityAPI.getInstance().registerClubActivity(clubActivity);
+                        ClubActivityAPI.getInstance().updateClubActivity(clubActivity.getKey(), clubActivity);
 
                         startActivity(new Intent(getApplicationContext(), ManagePic.class));
                         finish();

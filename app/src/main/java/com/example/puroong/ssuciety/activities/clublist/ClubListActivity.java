@@ -2,6 +2,7 @@ package com.example.puroong.ssuciety.activities.clublist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +21,7 @@ import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.activities.ClubSubmitActivity;
 import com.example.puroong.ssuciety.activities.FacebookLoginActivity;
 import com.example.puroong.ssuciety.activities.MyScheduleActivity;
+import com.example.puroong.ssuciety.activities.clubinfo.Clubinfomation;
 import com.example.puroong.ssuciety.activities.manageclub.ManageClubActivity;
 import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.api.ClubAPI;
@@ -179,6 +181,18 @@ public class ClubListActivity extends AppCompatActivity
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        clubList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Club club = adapter.getItem(position);
+                Log.d("TEST PUT", Integer.toString(position));
+                Log.d("TEST PUT", club.toMap().toString());
+
+                Intent intent = new Intent(getApplicationContext(), Clubinfomation.class);
+                intent.putExtra("clubKey", club.getKey());
+                startActivity(intent);
             }
         });
     }
