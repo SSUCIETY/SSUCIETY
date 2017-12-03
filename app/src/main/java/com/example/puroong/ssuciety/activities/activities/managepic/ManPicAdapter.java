@@ -27,15 +27,14 @@ public class ManPicAdapter extends ArrayAdapter<ClubActivity> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         ClubActivity user = getItem(position);
-        URI uri = new URI(user.getClubId());
+
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.actpicview, parent, false);
         }
         TextView tvname= (TextView) convertView.findViewById(R.id.actpicname);
         ImageView ivname=(ImageView) convertView.findViewById(R.id.actpic);
-        tvname.setText(user.getName());
-        ivname.setImageURI();
+
         return convertView;
     }
 }

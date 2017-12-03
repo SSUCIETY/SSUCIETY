@@ -41,23 +41,15 @@
             android:label="일정 보기" />
         <activity
             android:name=".activities.activities.clubinfo.Clubinfomation"
-            android:label="@string/title_activity_clubinfomation"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.activities.clubinfo.Clubinf" />
-        <activity android:name=".activities.activities.clubinfo.ClubSchedule" />
+            android:label="동아리 정보"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.activities.managepic.ManagePic"
-            android:label="@string/title_activity_manage_pic"
-            android:theme="@style/AppTheme.NoActionBar" >
-
-        </activity>
-        <activity android:name=".activities.activities.managepic.SelectPic"></activity>
+            android:label="활동사진 관리"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.activities.managepic.SelectPic"
+            android:label="활동사진 추가" />
     </application>
 
 </manifest>
