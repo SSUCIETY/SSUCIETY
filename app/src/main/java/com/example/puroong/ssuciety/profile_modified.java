@@ -1,4 +1,4 @@
-package com.example.puroong.ssuciety.activities;
+package com.example.puroong.ssuciety;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,8 +20,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.puroong.ssuciety.R;
-import com.example.puroong.ssuciety.activities.clublist.ClubListActivity;
+//import com.example.puroong.ssuciety.R;
+//import com.example.puroong.ssuciety.activities.clublist.ClubListActivity;
 
 import java.util.ArrayList;
 
@@ -65,31 +65,7 @@ public class profile_modified extends AppCompatActivity {
         editText3 = (EditText)findViewById(R.id.editText3);
         editText4 = (EditText)findViewById(R.id.editText4);
 
-        final ArrayList<String> list = new ArrayList<>();
-        list.add("1.연대사업");
-        list.add("2.연행예술");
-        list.add("3.종교");
-        list.add("4.창작전시");
-        list.add("5.체육");
-        list.add("6.학술");
-        spinner = (Spinner)findViewById(R.id.spinner);
-        ArrayAdapter sadapter;
-        sadapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,list);
-        spinner.setAdapter(sadapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(profile_modified.this,""+i,Toast.LENGTH_LONG).show();
-                category = i+1;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        final Intent intent = new Intent(getApplicationContext(), ClubListActivity.class);
+//        final Intent intent = new Intent(getApplicationContext(), ClubListActivity.class);
 
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +75,8 @@ public class profile_modified extends AppCompatActivity {
                 class1 = editText2.getText().toString();
                 entering_year = editText3.getText().toString();
                 phone_num = editText4.getText().toString();
-                startActivity(intent);
-                finish();
+//                startActivity(intent);
+//                finish();
             }
         });
     }

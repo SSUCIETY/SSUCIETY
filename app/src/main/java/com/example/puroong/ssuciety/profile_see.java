@@ -1,4 +1,4 @@
-package com.example.puroong.ssuciety.activities;
+package com.example.puroong.ssuciety;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
