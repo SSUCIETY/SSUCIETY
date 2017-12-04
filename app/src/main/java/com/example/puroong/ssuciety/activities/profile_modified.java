@@ -64,28 +64,48 @@ public class profile_modified extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                String url = imageViewUrl.toString();
+                String url = null;
 
-                ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
-                    @Override
-                    public void afterImageUpload(String downloadUrl) {
-                        String name = edName.getText().toString();
-                        String email = fUser.getEmail();
-                        String phoneNumber = edContact.getText().toString();
-                        String profileLink = downloadUrl;
-                        String major = edMajor.getText().toString();
-                        int admissionYear = Integer.parseInt(edYear.getText().toString());
-                        int gender = 1;
+                if(imageViewUrl != null){
+                    url = imageViewUrl.toString();
 
-                        User newUser = new User(name, email, phoneNumber, profileLink, major, admissionYear, gender, null, null);
+                    ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
+                        @Override
+                        public void afterImageUpload(String downloadUrl) {
+                            String name = edName.getText().toString();
+                            String email = fUser.getEmail();
+                            String phoneNumber = edContact.getText().toString();
+                            String profileLink = downloadUrl;
+                            String major = edMajor.getText().toString();
+                            int admissionYear = Integer.parseInt(edYear.getText().toString());
+                            int gender = 1;
 
-                        String uid = fUser.getUid();
+                            User newUser = new User(name, email, phoneNumber, profileLink, major, admissionYear, gender, null, null);
 
-                        UserAPI.getInstance().registerUser(uid, newUser);
-                        startActivity(new Intent(getApplicationContext(), ClubListActivity.class));
-                        finish();
-                    }
-                });
+                            String uid = fUser.getUid();
+
+                            UserAPI.getInstance().registerUser(uid, newUser);
+                            startActivity(new Intent(getApplicationContext(), ClubListActivity.class));
+                            finish();
+                        }
+                    });
+                } else {
+                    String name = edName.getText().toString();
+                    String email = fUser.getEmail();
+                    String phoneNumber = edContact.getText().toString();
+                    String profileLink = "";
+                    String major = edMajor.getText().toString();
+                    int admissionYear = Integer.parseInt(edYear.getText().toString());
+                    int gender = 1;
+
+                    User newUser = new User(name, email, phoneNumber, profileLink, major, admissionYear, gender, null, null);
+
+                    String uid = fUser.getUid();
+
+                    UserAPI.getInstance().registerUser(uid, newUser);
+                    startActivity(new Intent(getApplicationContext(), ClubListActivity.class));
+                    finish();
+                }
             }
         });
         imageView.setOnClickListener(new View.OnClickListener() {

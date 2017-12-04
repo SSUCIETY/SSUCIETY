@@ -57,20 +57,31 @@ public class UpdatePic extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bitmap bitmap = ((BitmapDrawable) iv.getDrawable()).getBitmap();
-                String url = ivUrl.toString();
+                String url = null;
 
-                ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
-                    @Override
-                    public void afterImageUpload(String downloadUrl) {
-                        clubActivity.setPictureLink(downloadUrl);
-                        clubActivity.setName(tvname.getText().toString());
+                if(ivUrl != null){
+                    url = ivUrl.toString();
 
-                        ClubActivityAPI.getInstance().updateClubActivity(clubActivity.getKey(), clubActivity);
+                    ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
+                        @Override
+                        public void afterImageUpload(String downloadUrl) {
+                            clubActivity.setPictureLink(downloadUrl);
+                            clubActivity.setName(tvname.getText().toString());
 
-                        startActivity(new Intent(getApplicationContext(), ManagePic.class));
-                        finish();
-                    }
-                });
+                            ClubActivityAPI.getInstance().updateClubActivity(clubActivity.getKey(), clubActivity);
+
+                            startActivity(new Intent(getApplicationContext(), ManagePic.class));
+                            finish();
+                        }
+                    });
+                } else {
+                    clubActivity.setName(tvname.getText().toString());
+
+                    ClubActivityAPI.getInstance().updateClubActivity(clubActivity.getKey(), clubActivity);
+
+                    startActivity(new Intent(getApplicationContext(), ManagePic.class));
+                    finish();
+                }
             }
         });
     }

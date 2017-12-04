@@ -49,25 +49,42 @@ public class SelectPic extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bitmap bitmap = ((BitmapDrawable) iv.getDrawable()).getBitmap();
-                String url = ivUrl.toString();
+                String url = null;
 
-                ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
-                    @Override
-                    public void afterImageUpload(String downloadUrl) {
-                        User user = UserAPI.getInstance().getCurrentUser();
+                if(ivUrl != null){
+                    url = ivUrl.toString();
 
-                        String name = tvname.getText().toString();
-                        String pictureLink = downloadUrl;
-                        String clubId = user.getManagingClubId();
+                    ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
+                        @Override
+                        public void afterImageUpload(String downloadUrl) {
+                            User user = UserAPI.getInstance().getCurrentUser();
 
-                        ClubActivity clubActivity = new ClubActivity(name, pictureLink, clubId);
+                            String name = tvname.getText().toString();
+                            String pictureLink = downloadUrl;
+                            String clubId = user.getManagingClubId();
 
-                        ClubActivityAPI.getInstance().registerClubActivity(clubActivity);
+                            ClubActivity clubActivity = new ClubActivity(name, pictureLink, clubId);
 
-                        startActivity(new Intent(getApplicationContext(), ManagePic.class));
-                        finish();
-                    }
-                });
+                            ClubActivityAPI.getInstance().registerClubActivity(clubActivity);
+
+                            startActivity(new Intent(getApplicationContext(), ManagePic.class));
+                            finish();
+                        }
+                    });
+                } else {
+                    User user = UserAPI.getInstance().getCurrentUser();
+
+                    String name = tvname.getText().toString();
+                    String pictureLink = "";
+                    String clubId = user.getManagingClubId();
+
+                    ClubActivity clubActivity = new ClubActivity(name, pictureLink, clubId);
+
+                    ClubActivityAPI.getInstance().registerClubActivity(clubActivity);
+
+                    startActivity(new Intent(getApplicationContext(), ManagePic.class));
+                    finish();
+                }
             }
         });
     }

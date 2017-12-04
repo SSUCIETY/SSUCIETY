@@ -37,7 +37,7 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".activities.clublist.ClubListActivity"
-            android:label="동아리 목록"
+            android:label="숭아리"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -81,16 +81,28 @@
         <activity
             android:name=".activities.clubinfo.Clubinfomation"
             android:label="동아리 정보"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.managepic.ManagePic"
+            android:launchMode="singleInstance"
             android:label="활동사진 관리" />
         <activity
             android:name=".activities.managepic.SelectPic"
+            android:launchMode="singleInstance"
             android:label="활동사진 추가" />
-        <activity android:name=".activities.managepic.UpdatePic"></activity>
-        <activity android:name=".activities.profile_modified" />
-        <activity android:name=".activities.profile_see" />
+        <activity
+            android:name=".activities.managepic.UpdatePic"
+            android:label="활동사진 관리"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activities.profile_modified"
+            android:label="프로필 수정"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activities.profile_see"
+            android:label="프로필"
+            android:launchMode="singleInstance"/>
     </application>
 
 </manifest>

@@ -95,7 +95,7 @@ public class ImageUtil {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(context, "Image download url is malformed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Image download url is malformed", Toast.LENGTH_SHORT).show();
                 }
             }
         };

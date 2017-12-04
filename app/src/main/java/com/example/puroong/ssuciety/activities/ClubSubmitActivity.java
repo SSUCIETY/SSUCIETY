@@ -43,6 +43,7 @@ public class ClubSubmitActivity extends AppCompatActivity {
         final TextView clubDescription = (TextView) findViewById(R.id.tvClubDescription);
         final Switch clubHasRoom = (Switch) findViewById(R.id.swHasRoom);
         final Spinner clubTagType = (Spinner) findViewById(R.id.spTagType);
+        clubWallpaper = (ImageView) findViewById(R.id.ivClubWallpaper);
 
         Button submit = (Button) findViewById(R.id.btnSubmit);
 
@@ -50,26 +51,44 @@ public class ClubSubmitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bitmap bitmap = ((BitmapDrawable) clubWallpaper.getDrawable()).getBitmap();
-                String url = clubWallpaperUrl.toString();
+                String url = null;
 
-                ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
-                    @Override
-                    public void afterImageUpload(String downloadUrl) {
-                        String name = clubName.getText().toString();
-                        String wallpaperLink = downloadUrl;
-                        String intro = clubIntro.getText().toString();
-                        String description = clubDescription.getText().toString();
-                        boolean hasRoom = clubHasRoom.isChecked();
-                        String tagName = clubTagType.getSelectedItem().toString();
-                        String adminId = UserAPI.getInstance().getCurrentUser().getUid();
+                if(clubWallpaperUrl != null){
+                    url = clubWallpaperUrl.toString();
 
-                        Club club = new Club(name, wallpaperLink, intro, description, hasRoom, tagName, adminId, null, null, null);
-                        ClubAPI.getInstance().registerClub(club);
+                    ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
+                        @Override
+                        public void afterImageUpload(String downloadUrl) {
+                            String name = clubName.getText().toString();
+                            String wallpaperLink = downloadUrl;
+                            String intro = clubIntro.getText().toString();
+                            String description = clubDescription.getText().toString();
+                            boolean hasRoom = clubHasRoom.isChecked();
+                            String tagName = clubTagType.getSelectedItem().toString();
+                            String adminId = UserAPI.getInstance().getCurrentUser().getUid();
 
-                        startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
-                        finish();
-                    }
-                });
+                            Club club = new Club(name, wallpaperLink, intro, description, hasRoom, tagName, adminId, null, null, null);
+                            ClubAPI.getInstance().registerClub(club);
+
+                            startActivity(new Intent(getApplicationContext(), ClubListActivity.class));
+                            finish();
+                        }
+                    });
+                } else {
+                    String name = clubName.getText().toString();
+                    String wallpaperLink = "";
+                    String intro = clubIntro.getText().toString();
+                    String description = clubDescription.getText().toString();
+                    boolean hasRoom = clubHasRoom.isChecked();
+                    String tagName = clubTagType.getSelectedItem().toString();
+                    String adminId = UserAPI.getInstance().getCurrentUser().getUid();
+
+                    Club club = new Club(name, wallpaperLink, intro, description, hasRoom, tagName, adminId, null, null, null);
+                    ClubAPI.getInstance().registerClub(club);
+
+                    startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
+                    finish();
+                }
             }
         });
 

@@ -202,7 +202,7 @@ public class Clubinfomation extends AppCompatActivity {
                     rootView = inflater.inflate(R.layout.activity_club_act_pic, container, false);
                     finalRootView = rootView;
 
-                    clubId = user.getManagingClubId();
+                    clubId = clubKey;
 
                     ListView listView = (ListView)rootView.findViewById(R.id.listview);
                     final ClubActPicAdapter cap= new ClubActPicAdapter(rootView.getContext(), new ArrayList<ClubActivity>());
@@ -259,7 +259,6 @@ public class Clubinfomation extends AppCompatActivity {
                     ClubScheduleAPI.getInstance().getAllClubSchedules(rootView.getContext(), new AfterQueryListener() {
                         @Override
                         public void afterQuery(DataSnapshot dataSnapshot) {
-                            User user = UserAPI.getInstance().getCurrentUser();
                             final ArrayList<ClubSchedule> clubSchedules = new ArrayList<ClubSchedule>();
 
                             // filter club schedules
@@ -267,7 +266,7 @@ public class Clubinfomation extends AppCompatActivity {
                             for (DataSnapshot clubScheduleSnapshot : dataSnapshot.getChildren()) {
                                 final ClubSchedule clubSchedule = new ClubSchedule(clubScheduleSnapshot);
 
-                                if (user.getManagingClubId().equals(clubSchedule.getClubId())) {
+                                if (clubSchedule.getClubId().equals(clubKey)) {
                                     if (clubNames.get(clubSchedule.getClubId()) == null) {
                                         ClubAPI.getInstance().getClubByKey(clubSchedule.getClubId(), finalRootView.getContext(), new AfterQueryListener() {
                                             @Override

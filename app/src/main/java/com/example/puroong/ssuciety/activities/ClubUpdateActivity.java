@@ -80,30 +80,52 @@ public class ClubUpdateActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Bitmap bitmap = ((BitmapDrawable) clubWallpaper.getDrawable()).getBitmap();
-                        String url = clubWallpaperUrl.toString();
+                        String url = null;
 
-                        ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
-                            @Override
-                            public void afterImageUpload(String downloadUrl) {
-                                String name = clubName.getText().toString();
-                                String intro = clubIntro.getText().toString();
-                                String description = clubDescription.getText().toString();
-                                boolean hasRoom = clubHasRoom.isChecked();
-                                String tagName = clubTagType.getSelectedItem().toString();
+                        if(clubWallpaperUrl != null){
+                            url = clubWallpaperUrl.toString();
 
-                                club.setWallpaperLink(downloadUrl);
-                                club.setName(name);
-                                club.setIntroduction(intro);
-                                club.setDescription(description);
-                                club.setHasClubroom(hasRoom);
-                                club.setTagId(tagName);
+                            ImageUtil.getInstance().uploadImage(getApplicationContext(), bitmap, url, new AfterImageUploadListener() {
+                                @Override
+                                public void afterImageUpload(String downloadUrl) {
+                                    String name = clubName.getText().toString();
+                                    String intro = clubIntro.getText().toString();
+                                    String description = clubDescription.getText().toString();
+                                    boolean hasRoom = clubHasRoom.isChecked();
+                                    String tagName = clubTagType.getSelectedItem().toString();
 
-                                ClubAPI.getInstance().updateClub(club.getKey(), club);
+                                    club.setWallpaperLink(downloadUrl);
+                                    club.setName(name);
+                                    club.setIntroduction(intro);
+                                    club.setDescription(description);
+                                    club.setHasClubroom(hasRoom);
+                                    club.setTagId(tagName);
 
-                                startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
-                                finish();
-                            }
-                        });
+                                    ClubAPI.getInstance().updateClub(club.getKey(), club);
+
+                                    startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
+                                    finish();
+                                }
+                            });
+                        } else {
+                            String name = clubName.getText().toString();
+                            String intro = clubIntro.getText().toString();
+                            String description = clubDescription.getText().toString();
+                            boolean hasRoom = clubHasRoom.isChecked();
+                            String tagName = clubTagType.getSelectedItem().toString();
+
+                            club.setName(name);
+                            club.setIntroduction(intro);
+                            club.setDescription(description);
+                            club.setHasClubroom(hasRoom);
+                            club.setTagId(tagName);
+
+                            ClubAPI.getInstance().updateClub(club.getKey(), club);
+
+                            startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
+                            finish();
+                        }
+
                     }
                 });
 
