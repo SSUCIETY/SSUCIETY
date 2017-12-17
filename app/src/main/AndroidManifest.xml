@@ -34,7 +34,7 @@
         <activity
             android:name=".activities.FacebookLoginActivity"
             android:label="로그인"
-            android:launchMode="singleInstance" />
+            android:launchMode="standard" />
         <activity
             android:name=".activities.clublist.ClubListActivity"
             android:label="숭아리"
@@ -48,7 +48,7 @@
         <activity
             android:name=".activities.MyScheduleActivity"
             android:label="일정 보기"
-            android:launchMode="singleInstance" />
+            android:launchMode="standard" />
         <activity
             android:name=".activities.ClubSubmitActivity"
             android:label="동아리 등록"
@@ -56,28 +56,28 @@
         <activity
             android:name=".activities.manageclub.ManageClubActivity"
             android:label="동아리 관리"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".activities.ClubUpdateActivity"
             android:label="동아리 수정"
-            android:launchMode="singleInstance" />
+            android:launchMode="standard" />
         <activity
             android:name=".activities.clubschedulemanage.ClubScheduleManageActivity"
             android:label="동아리 일정 관리"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ClubScheduleSubmitActivity"
             android:label="동아리 일정 추가"
-            android:launchMode="singleInstance" />
+            android:launchMode="standard" />
         <activity
             android:name=".activities.ClubScheduleUpdateActivity"
             android:label="동아리 일정 수정"
-            android:launchMode="singleInstance" />
+            android:launchMode="standard" />
         <activity
             android:name=".activities.ClubAdminTransferActivity"
             android:label="관리자 양도"
-            android:launchMode="singleInstance" />
+            android:launchMode="standard" />
         <activity
             android:name=".activities.clubinfo.Clubinfomation"
             android:label="동아리 정보"
@@ -85,24 +85,24 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.managepic.ManagePic"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:label="활동사진 관리" />
         <activity
             android:name=".activities.managepic.SelectPic"
-            android:launchMode="singleInstance"
+            android:launchMode="standard"
             android:label="활동사진 추가" />
         <activity
             android:name=".activities.managepic.UpdatePic"
-            android:label="활동사진 관리"
-            android:launchMode="singleInstance" />
+            android:label="활동사진 수정"
+            android:launchMode="standard" />
         <activity
             android:name=".activities.profile_modified"
             android:label="프로필 수정"
-            android:launchMode="singleInstance" />
+            android:launchMode="standard" />
         <activity
             android:name=".activities.profile_see"
             android:label="프로필"
-            android:launchMode="singleInstance"/>
+            android:launchMode="standard"/>
     </application>
 
 </manifest>
