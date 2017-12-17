@@ -11,8 +11,10 @@ import android.widget.Toast;
 
 import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.activities.clublist.ClubListActivity;
+import com.example.puroong.ssuciety.api.ClubAPI;
 import com.example.puroong.ssuciety.listeners.AfterQueryListener;
 import com.example.puroong.ssuciety.api.UserAPI;
+import com.example.puroong.ssuciety.models.Club;
 import com.example.puroong.ssuciety.models.User;
 import com.google.firebase.database.DataSnapshot;
 
@@ -28,6 +30,8 @@ public class ClubAdminTransferActivity extends AppCompatActivity {
         final EditText etContact = (EditText) findViewById(R.id.etContact);
         final Button submit = (Button) findViewById(R.id.btnSubmit);
 
+        final String clubId = UserAPI.getInstance().getCurrentUser().getManagingClubId();
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,24 +40,36 @@ public class ClubAdminTransferActivity extends AppCompatActivity {
                 UserAPI.getInstance().getUserByContact(contact, getApplicationContext(), new AfterQueryListener() {
                     @Override
                     public void afterQuery(DataSnapshot dataSnapshot) {
-                        // TODO: have to use datasnap getchildren
                         int len = 0;
 
-                        for(DataSnapshot clubScheduleSnapshot:dataSnapshot.getChildren()){
+                        for(final DataSnapshot userDataSnapshot:dataSnapshot.getChildren()){
                             len++;
 
-                            if(clubScheduleSnapshot.getValue(User.class) != null){
-                                User newAdmin = new User(clubScheduleSnapshot);
+                            if(userDataSnapshot.getValue(User.class) != null){
 
-                                newAdmin.setManagingClubId(user.getManagingClubId());
-                                user.setManagingClubId(null);
+                                ClubAPI.getInstance().getClubByKey(clubId, getApplicationContext(), new AfterQueryListener() {
+                                    @Override
+                                    public void afterQuery(DataSnapshot dataSnapshot) {
+                                        Club club = new Club(dataSnapshot);
+                                        User newAdmin = new User(userDataSnapshot);
 
-                                UserAPI.getInstance().updateUser(newAdmin.getUid(), newAdmin);
-                                UserAPI.getInstance().updateUser(user.getUid(), user);
+                                        // update user managing club info
+                                        newAdmin.setManagingClubId(user.getManagingClubId());
+                                        user.setManagingClubId(null);
 
-                                Intent intent = new Intent(getApplicationContext(), ClubListActivity.class);
-                                startActivity(intent);
-                                finish();
+                                        // update club admin info
+                                        club.setAdminId(newAdmin.getUid());
+
+                                        UserAPI.getInstance().updateUser(newAdmin.getUid(), newAdmin);
+                                        UserAPI.getInstance().updateUser(user.getUid(), user);
+
+                                        ClubAPI.getInstance().updateClub(clubId, club);
+
+                                        Intent intent = new Intent(getApplicationContext(), ClubListActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
                             }
                             else{
                                 Toast.makeText(getApplicationContext(), "no such user", Toast.LENGTH_SHORT).show();
