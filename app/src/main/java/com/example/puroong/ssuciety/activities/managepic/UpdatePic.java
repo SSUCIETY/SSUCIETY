@@ -35,7 +35,7 @@ public class UpdatePic extends AppCompatActivity {
 
         final ClubActivity clubActivity = getIntent().getParcelableExtra("clubActivity");
         final TextView tvname = (TextView) findViewById(R.id.edit_Picname);
-        Button btn = (Button) findViewById(R.id.addpic);
+        final Button btn = (Button) findViewById(R.id.addpic);
         iv = (ImageView) findViewById(R.id.imageView4);
 
         ImageUtil.getInstance().loadImage(getApplicationContext(), handler, clubActivity.getPictureLink(), new AfterImageLoadListener() {
@@ -56,6 +56,8 @@ public class UpdatePic extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btn.setEnabled(false);
+
                 Bitmap bitmap = ((BitmapDrawable) iv.getDrawable()).getBitmap();
                 String url = null;
 

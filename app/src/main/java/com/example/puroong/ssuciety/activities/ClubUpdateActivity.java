@@ -74,11 +74,12 @@ public class ClubUpdateActivity extends AppCompatActivity {
                 int index = Arrays.asList(tags).indexOf(club.getTagId());
                 clubTagType.setSelection(index);
 
-                Button submit = (Button) findViewById(R.id.btnSubmit);
+                final Button submit = (Button) findViewById(R.id.btnSubmit);
 
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        submit.setEnabled(false);
                         Bitmap bitmap = ((BitmapDrawable) clubWallpaper.getDrawable()).getBitmap();
                         String url = null;
 
@@ -125,7 +126,6 @@ public class ClubUpdateActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
                             finish();
                         }
-
                     }
                 });
 

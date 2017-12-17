@@ -53,6 +53,7 @@ public class ClubAdminTransferActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(getApplicationContext(), ClubListActivity.class);
                                 startActivity(intent);
+                                finish();
                             }
                             else{
                                 Toast.makeText(getApplicationContext(), "no such user", Toast.LENGTH_SHORT).show();

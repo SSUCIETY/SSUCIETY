@@ -104,7 +104,6 @@ public class profile_modified extends AppCompatActivity {
 
                     UserAPI.getInstance().registerUser(uid, newUser);
                     startActivity(new Intent(getApplicationContext(), ClubListActivity.class));
-                    finish();
                 }
             }
         });

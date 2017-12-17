@@ -140,6 +140,7 @@ public class ClubScheduleUpdateActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(getApplicationContext(), ClubScheduleManageActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 });
             }

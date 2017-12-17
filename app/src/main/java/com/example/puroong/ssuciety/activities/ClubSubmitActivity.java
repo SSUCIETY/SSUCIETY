@@ -85,10 +85,10 @@ public class ClubSubmitActivity extends AppCompatActivity {
 
                     Club club = new Club(name, wallpaperLink, intro, description, hasRoom, tagName, adminId, null, null, null);
                     ClubAPI.getInstance().registerClub(club);
-
-                    startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
-                    finish();
                 }
+
+                startActivity(new Intent(getApplicationContext(), ManageClubActivity.class));
+                finish();
             }
         });
 

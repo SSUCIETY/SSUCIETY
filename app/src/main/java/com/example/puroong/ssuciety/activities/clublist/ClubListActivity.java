@@ -1,5 +1,6 @@
 package com.example.puroong.ssuciety.activities.clublist;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -49,7 +52,6 @@ public class ClubListActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
             startActivity(new Intent(getApplicationContext(), FacebookLoginActivity.class));
             finish();
@@ -66,15 +68,32 @@ public class ClubListActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        ObjectAnimator animation = ObjectAnimator.ofInt (progressBar, "progress", 0, 500); // see this max value coming back here, we animale towards that value
+        animation.setDuration (5000); //in milliseconds
+        animation.setInterpolator (new DecelerateInterpolator());
+        animation.start();
+
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         UserAPI.getInstance().getUserByUid(uid, getApplicationContext(), new AfterQueryListener() {
             @Override
             public void afterQuery(DataSnapshot dataSnapshot) {
-                updateUI();
+            progressBar.setVisibility(View.GONE);
+            updateUI();
             }
         });
     }
     private void updateUI() {
+        TextView tvTagText = (TextView) findViewById(R.id.tvTagText);
+        Spinner spTagType = (Spinner) findViewById(R.id.spTagType);
+        View line = (View) findViewById(R.id.line);
+
+        tvTagText.setVisibility(View.VISIBLE);
+        spTagType.setVisibility(View.VISIBLE);
+        line.setVisibility(View.VISIBLE);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
