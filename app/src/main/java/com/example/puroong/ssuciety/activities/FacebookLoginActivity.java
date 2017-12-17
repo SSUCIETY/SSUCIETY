@@ -15,6 +15,7 @@ import com.example.puroong.ssuciety.R;
 import com.example.puroong.ssuciety.activities.clublist.ClubListActivity;
 import com.example.puroong.ssuciety.api.UserAPI;
 import com.example.puroong.ssuciety.listeners.AfterQueryListener;
+import com.example.puroong.ssuciety.models.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -101,9 +102,10 @@ public class FacebookLoginActivity extends AppCompatActivity {
                                 public void afterQuery(DataSnapshot dataSnapshot) {
                                     Intent intent = null;
 
-                                    if(dataSnapshot == null){
+                                    if(dataSnapshot.getValue(User.class) == null){
                                         intent = new Intent(getApplicationContext(), profile_modified.class);
                                     } else {
+
                                         intent = new Intent(getApplicationContext(), ClubListActivity.class);
                                     }
 

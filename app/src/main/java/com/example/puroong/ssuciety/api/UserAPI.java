@@ -33,7 +33,11 @@ public class UserAPI {
         userRef.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                user = new User(dataSnapshot);
+                if(dataSnapshot.getValue(User.class) != null){
+                    user = new User(dataSnapshot);
+                } else{
+                    user = null;
+                }
             }
 
             @Override
