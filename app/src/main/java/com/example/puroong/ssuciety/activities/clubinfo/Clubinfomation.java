@@ -1,8 +1,10 @@
 package com.example.puroong.ssuciety.activities.clubinfo;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -178,7 +180,7 @@ public class Clubinfomation extends AppCompatActivity {
                             UserAPI.getInstance().getUserByUid(club.getAdminId(), finalRootView.getContext(), new AfterQueryListener() {
                                 @Override
                                 public void afterQuery(DataSnapshot dataSnapshot) {
-                                    User admin = new User(dataSnapshot);
+                                    final User admin = new User(dataSnapshot);
 
                                     String roomString = null;
                                     if(club.isHasClubroom()){
@@ -193,6 +195,17 @@ public class Clubinfomation extends AppCompatActivity {
                                     clubHasRoom.setText(roomString);
                                     clubTagType.setText(club.getTagId());
                                     phoneNumber.setText(admin.getPhoneNumber());
+
+                                    phoneNumber.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            User user = UserAPI.getInstance().getCurrentUser();
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + admin.getPhoneNumber()));
+                                            String message = "안녕하세요\n숭아리에서 동아리 소개를 보고 연락드립니다.\n이름: "+user.getName()+"\n전공: "+user.getMajor()+"\n입학년도: "+user.getAdmissionYear();
+                                            intent.putExtra("sms_body", message);
+                                            startActivity(intent);
+                                        }
+                                    });
                                 }
                             });
                         }
