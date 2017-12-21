@@ -142,7 +142,7 @@ public class ClubListActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Club club = new Club(dataSnapshot);
 
-                if(club.getTagId().equals(tagText.getText().toString())){
+                if(tagText.getText().toString().equals("전체") || club.getTagId().equals(tagText.getText().toString())){
                     adapter.add(club);
                 }
             }
@@ -151,7 +151,7 @@ public class ClubListActivity extends AppCompatActivity
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Club club = new Club(dataSnapshot);
 
-                if(club.getTagId().equals(tagText.getText().toString())){
+                if(tagText.getText().toString().equals("전체") || club.getTagId().equals(tagText.getText().toString())){
                     adapter.updateByKey(club.getKey(), club);
                 }
             }
@@ -160,7 +160,7 @@ public class ClubListActivity extends AppCompatActivity
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Club club = new Club(dataSnapshot);
 
-                if(club.getTagId().equals(tagText.getText().toString())){
+                if(tagText.getText().toString().equals("전체") || club.getTagId().equals(tagText.getText().toString())){
                     adapter.removeByKey(club.getKey());
                 }
             }
@@ -185,16 +185,30 @@ public class ClubListActivity extends AppCompatActivity
                     tagText.setText(text);
 
                     // set listview content
-                    ClubAPI.getInstance().getClubsByTag(tagText.getText().toString(), getApplicationContext(), new AfterQueryListener() {
-                        @Override
-                        public void afterQuery(DataSnapshot dataSnapshot) {
-                            adapter.clear();
+                    if(tagText.getText().toString().equals("전체")){
+                        ClubAPI.getInstance().getAllClubs(getApplicationContext(), new AfterQueryListener() {
+                            @Override
+                            public void afterQuery(DataSnapshot dataSnapshot) {
+                                adapter.clear();
 
-                            for(DataSnapshot clubSnapshot : dataSnapshot.getChildren()){
-                                adapter.add(new Club(clubSnapshot));
+                                for(DataSnapshot clubSnapshot : dataSnapshot.getChildren()){
+                                    adapter.add(new Club(clubSnapshot));
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else {
+                        ClubAPI.getInstance().getClubsByTag(tagText.getText().toString(), getApplicationContext(), new AfterQueryListener() {
+                            @Override
+                            public void afterQuery(DataSnapshot dataSnapshot) {
+                                adapter.clear();
+
+                                for(DataSnapshot clubSnapshot : dataSnapshot.getChildren()){
+                                    adapter.add(new Club(clubSnapshot));
+                                }
+                            }
+                        });
+                    }
                 }
             }
 
